@@ -111,24 +111,37 @@ requirement_array
 ```
 ## Calculate the formular
 ```r
+#set the price of each feed.
+# For example, the price of corn is 10 per kelogram, cotton seed is 1, and wheat straw is 1. 
 obj <- c(10, 1, 1)
+# transparent the matrix, and conver the string to numeric.
 mat <- t(matrix(as.numeric(nutrition_array), nrow = 3))
 mat
+#       [,1]    [,2]   [,3]
+#[1,]  0.884   0.891  0.896
+#[2,] 86.000 312.000 56.000
+#[3,]  1.000   0.750  0.240
+# set equily to the result.
 dir <- c("==", "==", "==")
+# this place is the requirement of nutrition of beef cattle about 300kg, gain 1.2 kg per day.
 rhs <- as.numeric(requirement_array)
 rhs
+#Dry_matter, Crude_protein, Energy_Unit_RND
+#[1]   7.64 850.00   5.69
 max <- TRUE
 forumla_result=Rglpk_solve_LP(obj, mat, dir, rhs, max = max)
 forumla_result
 feed_formula=forumla_result$solution
-
 ```
 ## Output the formulate.
 ```r
 names(feed_formula)=c('corn kg/day',"cotton seed kg/day","wheat straw kg/day")
 cost=forumla_result$optimum
 feed_formula
+#       corn kg/day cotton seed kg/day wheat straw kg/day 
+#         4.1324548          0.9575304          3.4974893 
 cost
+#[1] 45.7795
 ```
 
 
